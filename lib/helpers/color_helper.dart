@@ -6,5 +6,6 @@ abstract class AppColorHelper{
   static const Color backgroundColor = Color(0xFF1D1D23);
   static const Color darkBlueColor = Color(0xFF34344A);
   static const Color disableColor = Color(0xFF535377);
+  static const Color greyColor = Color(0xFF7A757F);
 
 }
