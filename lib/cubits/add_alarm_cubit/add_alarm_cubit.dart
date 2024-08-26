@@ -22,11 +22,9 @@ class AddAlarmCubit extends Cubit<AddAlarmStates> {
     required String alarmTone,
   }) async {
     emit(AddAlarmLoading());
-    Random random = Random();
-    int id = random.nextInt(1000);
     final result = await alarmRepo.addAlarm(
       alarm: AlarmModel(
-        id: id,
+        id: DateTime.now().millisecondsSinceEpoch + Random().nextInt(1000),
         alarmTime: alarmTime,
         alarmTitle: alarmTitle,
         alarmTone: alarmTone,

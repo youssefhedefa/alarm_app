@@ -64,6 +64,7 @@ class _AlarmItemState extends State<AlarmItem> {
                 icon: const Icon(
                   Icons.delete,
                   color: Colors.white,
+                  size: 28,
                 ),
               ),
             ],
