@@ -26,6 +26,8 @@ class _AlarmItemState extends State<AlarmItem> {
         children: [
           const Text(
             'Alarm 1',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: AppTextStyleHelper.font16whiteMedium,
           ),
           const SizedBox(height: 8),

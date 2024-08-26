@@ -1,9 +1,12 @@
-import 'package:alarm_app/ui/home_screen.dart';
+import 'package:alarm_app/routing/routing_constances.dart';
+import 'package:alarm_app/routing/routing_manager.dart';
 import 'package:flutter/material.dart';
 
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, required this.routingManager});
+
+  final AppRoutingManager routingManager;
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +18,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: 'Roboto',
       ),
-
-      home: const HomeScreen(),
+      onGenerateRoute: routingManager.onGenerateRoute,
+      initialRoute: AppRoutingConstances.home,
     );
   }
 }

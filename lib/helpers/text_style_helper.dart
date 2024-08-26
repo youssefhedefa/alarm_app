@@ -39,5 +39,11 @@ abstract class AppTextStyleHelper{
     fontWeight: FontWeight.w500,
   );
 
+  static const TextStyle font24BlackMedium = TextStyle(
+    color: AppColorHelper.blackColor,
+    fontSize: 24,
+    fontWeight: FontWeight.w500,
+  );
+
 
 }

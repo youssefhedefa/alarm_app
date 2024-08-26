@@ -1,4 +1,5 @@
 import 'package:alarm_app/helpers/color_helper.dart';
+import 'package:alarm_app/routing/routing_constances.dart';
 import 'package:alarm_app/ui/widgets/alarm_item.dart';
 import 'package:flutter/material.dart';
 
@@ -33,6 +34,7 @@ class HomeScreen extends StatelessWidget {
     return FloatingActionButton(
       backgroundColor: AppColorHelper.yellowColor,
       onPressed: () {
+        Navigator.pushNamed(context, AppRoutingConstances.addAlarm);
       },
       child: const Icon(
           Icons.add,
