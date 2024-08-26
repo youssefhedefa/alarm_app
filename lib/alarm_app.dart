@@ -1,5 +1,5 @@
-import 'package:alarm_app/routing/routing_constances.dart';
-import 'package:alarm_app/routing/routing_manager.dart';
+import 'package:alarm_app/core/routing/routing_constances.dart';
+import 'package:alarm_app/core/routing/routing_manager.dart';
 import 'package:flutter/material.dart';
 
 

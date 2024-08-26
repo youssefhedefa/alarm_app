@@ -1,17 +1,40 @@
-import 'package:alarm_app/helpers/color_helper.dart';
-import 'package:alarm_app/helpers/text_style_helper.dart';
+import 'package:alarm_app/core/helpers/color_helper.dart';
+import 'package:alarm_app/core/helpers/text_style_helper.dart';
+import 'package:alarm_app/cubits/get_alarms/get_alarms_cubit.dart';
+import 'package:alarm_app/data/model/alarm_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AlarmItem extends StatefulWidget {
-  const AlarmItem({super.key});
+  const AlarmItem({
+    super.key,
+    required this.alarm,
+  });
+
+  final AlarmModel alarm;
 
   @override
   State<AlarmItem> createState() => _AlarmItemState();
 }
 
 class _AlarmItemState extends State<AlarmItem> {
+  String alarmTime = '';
+  String alarmDate = '';
+  String amPm = '';
 
-  bool isSwitched = false;
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      setState(() {
+        alarmTime =
+            '${((widget.alarm.alarmTime.hour / 2) - 2).toInt()}:${widget.alarm.alarmTime.minute}';
+        alarmDate =
+            '${widget.alarm.alarmTime.day}/${widget.alarm.alarmTime.month}/${widget.alarm.alarmTime.year}';
+        amPm = widget.alarm.alarmTime.hour > 12 ? 'PM' : 'AM';
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,36 +47,57 @@ class _AlarmItemState extends State<AlarmItem> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Alarm 1',
+          Row(
+            children: [
+              Text(
+                widget.alarm.alarmTitle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyleHelper.font16whiteMedium,
+              ),
+              const Spacer(),
+              IconButton(
+                onPressed: () {
+                  widget.alarm.delete();
+                  context.read<GetAlarmsCubit>().getAlarms();
+                },
+                icon: const Icon(
+                  Icons.delete,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+          Text(
+            alarmDate,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: AppTextStyleHelper.font16whiteMedium,
           ),
           const SizedBox(height: 8),
-          const Row(
+          Row(
             children: [
               Text(
-                '8:00',
+                alarmTime,
                 style: AppTextStyleHelper.font36WhiteMedium,
               ),
-              SizedBox(width: 8),
+              const SizedBox(width: 8),
               Text(
-                'PM',
+                amPm,
                 style: AppTextStyleHelper.font18whiteMedium,
               ),
             ],
           ),
-          const SizedBox(height: 8),
           Align(
             alignment: Alignment.centerRight,
             child: Switch(
-              value: isSwitched,
+              value: widget.alarm.alarmActive,
               activeColor: Colors.white,
               activeTrackColor: AppColorHelper.yellowColor,
               onChanged: (value) {
                 setState(() {
-                  isSwitched = value;
+                  widget.alarm.alarmActive = value;
+                  widget.alarm.save();
                 });
               },
             ),

@@ -6,7 +6,7 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:alarm_app/alarm_app.dart';
-import 'package:alarm_app/routing/routing_manager.dart';
+import 'package:alarm_app/core/routing/routing_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

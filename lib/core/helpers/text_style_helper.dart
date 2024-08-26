@@ -1,4 +1,4 @@
-import 'package:alarm_app/helpers/color_helper.dart';
+import 'package:alarm_app/core/helpers/color_helper.dart';
 import 'package:flutter/material.dart';
 
 abstract class AppTextStyleHelper{

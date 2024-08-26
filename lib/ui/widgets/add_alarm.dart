@@ -1,8 +1,10 @@
-import 'package:alarm_app/helpers/color_helper.dart';
-import 'package:alarm_app/helpers/text_style_helper.dart';
+import 'package:alarm_app/core/helpers/color_helper.dart';
+import 'package:alarm_app/core/helpers/text_style_helper.dart';
+import 'package:alarm_app/cubits/add_alarm_cubit/add_alarm_cubit.dart';
 import 'package:alarm_app/ui/widgets/ring_selection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddAlarm extends StatelessWidget {
   const AddAlarm({super.key});
@@ -31,11 +33,13 @@ class AddAlarm extends StatelessWidget {
                     mode: CupertinoDatePickerMode.dateAndTime,
                     onDateTimeChanged: (DateTime dateTime) {
                       print(dateTime);
+                      context.read<AddAlarmCubit>().selectedTime = dateTime;
                     },
                   ),
                 ),
                 const SizedBox(height: 24),
                 TextField(
+                  controller: context.read<AddAlarmCubit>().alarmTitleController,
                   style: AppTextStyleHelper.font16whiteMedium,
                   cursorColor: AppColorHelper.disableColor,
                   decoration: InputDecoration(
@@ -50,7 +54,15 @@ class AddAlarm extends StatelessWidget {
                 const RingSelection(),
                 const SizedBox(height: 24),
                 MaterialButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.read<AddAlarmCubit>().addAlarm(
+                          alarmTime: context.read<AddAlarmCubit>().selectedTime,
+                          alarmTitle:
+                              context.read<AddAlarmCubit>().alarmTitleController.text,
+                          alarmTone: context.read<AddAlarmCubit>().selectedTone,
+                        );
+                    Navigator.pop(context,true);
+                  },
                   color: AppColorHelper.yellowColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
