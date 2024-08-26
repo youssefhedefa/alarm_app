@@ -1,10 +1,27 @@
+import 'package:alarm_app/helpers/audio_helper.dart';
 import 'package:alarm_app/helpers/color_helper.dart';
 import 'package:alarm_app/helpers/text_style_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
 
-class AddAlarm extends StatelessWidget {
+class AddAlarm extends StatefulWidget {
   const AddAlarm({super.key});
+
+  @override
+  State<AddAlarm> createState() => _AddAlarmState();
+}
+
+class _AddAlarmState extends State<AddAlarm> {
+
+  late AudioPlayer audioPlayer;
+  bool isPlaying = false;
+
+  @override
+  void initState() {
+    audioPlayer = AudioPlayer();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +45,9 @@ class AddAlarm extends StatelessWidget {
                     backgroundColor: AppColorHelper.disableColor,
                     minimumDate: DateTime.now(),
                     mode: CupertinoDatePickerMode.dateAndTime,
-                    onDateTimeChanged: (DateTime dateTime) {},
+                    onDateTimeChanged: (DateTime dateTime) {
+                      print(dateTime);
+                    },
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -44,25 +63,49 @@ class AddAlarm extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
-                DropdownMenu(
-                  menuHeight: 250,
-                  width: MediaQuery.of(context).size.width - 32,
-                  initialSelection: 0,
-                  textStyle: AppTextStyleHelper.font16whiteMedium,
-                  menuStyle: MenuStyle(
-                    backgroundColor: MaterialStateColor.resolveWith(
-                      (states) => AppColorHelper.disableColor,
+                Row(
+                  children: [
+                    DropdownMenu(
+                      menuHeight: 250,
+                      width: MediaQuery.of(context).size.width - 100,
+                      initialSelection: 0,
+                      textStyle: AppTextStyleHelper.font16whiteMedium,
+                      menuStyle: MenuStyle(
+                        backgroundColor: MaterialStateColor.resolveWith(
+                          (states) => AppColorHelper.disableColor,
+                        ),
+                      ),
+                      onSelected: (int? value) {
+                        audioPlayer.setAsset(audioMap[value!]!);
+                      },
+                      dropdownMenuEntries: dropDownItemMaker(items: [
+                        'Ring 1',
+                        'Ring 2',
+                        'Ring 3',
+                      ]),
                     ),
-                  ),
-                  onSelected: (int? value) {
-                    print(value);
-                  },
-                  dropdownMenuEntries: dropDownItemMaker(
-                      items: ['Everyday', 'Weekdays', 'Weekends', 'Custom']),
+                    const Spacer(),
+                    IconButton(
+                      onPressed: () {
+                        isPlaying ? audioPlayer.pause() :  audioPlayer.play();
+                        setState(() {
+                          isPlaying = !isPlaying;
+                        });
+                      },
+                      icon: Icon(
+                        isPlaying ? Icons.pause : Icons.play_arrow,
+                        color: AppColorHelper.yellowColor,
+                        size: 40,
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 24),
                 MaterialButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    audioPlayer.play();
+                    //playAudio();
+                  },
                   color: AppColorHelper.yellowColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
@@ -111,4 +154,11 @@ class AddAlarm extends StatelessWidget {
 
     return dropDownItems;
   }
+
+  Map<int,String> audioMap = {
+    0: AppAudioHelper.audio1Path,
+    1: AppAudioHelper.audio2Path,
+    2: AppAudioHelper.audio3Path,
+  };
+
 }
