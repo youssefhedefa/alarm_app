@@ -26,8 +26,7 @@ class _AlarmItemState extends State<AlarmItem> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       setState(() {
-        alarmTime =
-            '${((widget.alarm.alarmTime.hour / 2) - 2).toInt()}:${widget.alarm.alarmTime.minute}';
+        alarmTime = '${timeFormat().toString().padLeft(2, '0')} : ${widget.alarm.alarmTime.minute.toString().padLeft(2, '0')}';
         alarmDate =
             '${widget.alarm.alarmTime.day}/${widget.alarm.alarmTime.month}/${widget.alarm.alarmTime.year}';
         amPm = widget.alarm.alarmTime.hour > 12 ? 'PM' : 'AM';
@@ -36,8 +35,19 @@ class _AlarmItemState extends State<AlarmItem> {
     super.initState();
   }
 
+  timeFormat(){
+    if(widget.alarm.alarmTime.hour == 0){
+      return 12;
+    }
+    else{
+      return widget.alarm.alarmTime.hour > 12 ? ((widget.alarm.alarmTime.hour / 2) - 2).toInt() : widget.alarm.alarmTime.hour;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(widget.alarm.id);
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(

@@ -1,4 +1,5 @@
 import 'package:alarm_app/core/helpers/color_helper.dart';
+import 'package:alarm_app/core/helpers/notify_helper.dart';
 import 'package:alarm_app/core/helpers/text_style_helper.dart';
 import 'package:alarm_app/core/routing/routing_constances.dart';
 import 'package:alarm_app/cubits/get_alarms/get_alarms_cubit.dart';
@@ -61,8 +62,11 @@ class HomeScreen extends StatelessWidget {
       backgroundColor: AppColorHelper.yellowColor,
       onPressed: () {
         // get alarm data
+
         Navigator.pushNamed(context, AppRoutingConstances.addAlarm)
             .then((value) => context.read<GetAlarmsCubit>().getAlarms());
+
+        AppNotifyHelper.showBasicNotification();
       },
       child: const Icon(
         Icons.add,

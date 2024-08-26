@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-import 'package:flutter_timezone/flutter_timezone.dart';
 
 
 class AppNotifyHelper{
@@ -32,37 +31,19 @@ class AppNotifyHelper{
 
   //basic Notification
   static void showBasicNotification() async {
-    AndroidNotificationDetails android = AndroidNotificationDetails(
-        'id 1', 'basic notification',
+    AndroidNotificationDetails android = const AndroidNotificationDetails(
+        'id : basic notification',
+        'basic notification',
         importance: Importance.max,
         priority: Priority.high,
-        sound:
-        RawResourceAndroidNotificationSound('sound.wav'.split('.').first));
+        // sound:
+        // RawResourceAndroidNotificationSound('sound.wav'.split('.').first)
+      );
     NotificationDetails details = NotificationDetails(
       android: android,
     );
     await flutterLocalNotificationsPlugin.show(
       0,
-      'Baisc Notification',
-      'body',
-      details,
-      payload: "Payload Data",
-    );
-  }
-
-  //basic Notification2
-  static void showBasicNotification2() async {
-    AndroidNotificationDetails android = AndroidNotificationDetails(
-        'id 3', 'basic notification1',
-        importance: Importance.max,
-        priority: Priority.high,
-        sound:
-        RawResourceAndroidNotificationSound('sound.wav'.split('.').first));
-    NotificationDetails details = NotificationDetails(
-      android: android,
-    );
-    await flutterLocalNotificationsPlugin.show(
-      4,
       'Basic Notification',
       'body',
       details,
@@ -70,10 +51,30 @@ class AppNotifyHelper{
     );
   }
 
+  //basic Notification2
+  // static void showBasicNotification2() async {
+  //   AndroidNotificationDetails android = AndroidNotificationDetails(
+  //       'id 3', 'basic notification1',
+  //       importance: Importance.max,
+  //       priority: Priority.high,
+  //       sound:
+  //       RawResourceAndroidNotificationSound('sound.wav'.split('.').first));
+  //   NotificationDetails details = NotificationDetails(
+  //     android: android,
+  //   );
+  //   await flutterLocalNotificationsPlugin.show(
+  //     4,
+  //     'Basic Notification',
+  //     'body',
+  //     details,
+  //     payload: "Payload Data",
+  //   );
+  // }
+
   //showRepeatedNotification
   static void showRepeatedNotification() async {
     const AndroidNotificationDetails android = AndroidNotificationDetails(
-      'id 2',
+      'id 2 : RepeatedNotification',
       'repeated notification',
       importance: Importance.max,
       priority: Priority.high,
@@ -81,20 +82,23 @@ class AppNotifyHelper{
     NotificationDetails details = const NotificationDetails(
       android: android,
     );
+
+    //make repeated notification after 5 minutes
+
     await flutterLocalNotificationsPlugin.periodicallyShow(
       1,
-      'Reapated Notification',
+      'repeated Notification',
       'body',
-      RepeatInterval.daily,
+      RepeatInterval.everyMinute,
       details,
       payload: "Payload Data",
     );
   }
 
-  //showSchduledNotification
-  static void showSchduledNotification() async {
+  //showScheduledNotification
+  static void showScheduledNotification({required DateTime time}) async {
     const AndroidNotificationDetails android = AndroidNotificationDetails(
-      'schduled notification',
+      'scheduled notification',
       'id 3',
       importance: Importance.max,
       priority: Priority.high,
@@ -105,33 +109,44 @@ class AppNotifyHelper{
     tz.initializeTimeZones();
     log(tz.local.name);
     log("Before ${tz.TZDateTime.now(tz.local).hour}");
-    final String currentTimeZone = await FlutterTimezone.getLocalTimezone();
-    log(currentTimeZone);
-    tz.setLocalLocation(tz.getLocation(currentTimeZone));
+    tz.setLocalLocation(tz.getLocation('Europe/Paris'));
     log(tz.local.name);
-    log("After ${tz.TZDateTime.now(tz.local).hour}");
+    log(tz.TZDateTime(
+      tz.local,
+      time.year,
+      time.month,
+      time.day,
+      time.hour,
+      time.minute,
+      time.second,
+    ).toString(),);
+
+    log("After ${tz.TZDateTime.now(tz.local).hour} ${tz.TZDateTime.now(tz.local).minute}");
+
     await flutterLocalNotificationsPlugin.zonedSchedule(
       2,
-      'Schduled Notification',
+      'Scheduled Notification',
       'body',
-      tz.TZDateTime.now(tz.local).add(const Duration(seconds: 10)),
-      // tz.TZDateTime(
-      //   tz.local,
-      //   2024,
-      //   2,
-      //   10,
-      //   21,
-      //   30,
-      // ),
+      // tz.TZDateTime.add(const Duration(seconds: 40), tz.getLocation('Europe/Paris')),
+      tz.TZDateTime(
+        tz.local,
+        time.year,
+        time.month,
+        time.day,
+        time.hour,
+        time.minute,
+        time.second,
+      ),
       details,
       payload: 'zonedSchedule',
+      androidScheduleMode: AndroidScheduleMode.alarmClock,
       uiLocalNotificationDateInterpretation:
       UILocalNotificationDateInterpretation.absoluteTime,
     );
   }
 
-  //showDailySchduledNotification
-  static void showDailySchduledNotification() async {
+  //showDailyScheduledNotification
+  static void showDailyScheduledNotification() async {
     const AndroidNotificationDetails android = AndroidNotificationDetails(
       'daily schduled notification',
       'id 4',

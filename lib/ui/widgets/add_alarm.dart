@@ -1,4 +1,5 @@
 import 'package:alarm_app/core/helpers/color_helper.dart';
+import 'package:alarm_app/core/helpers/notify_helper.dart';
 import 'package:alarm_app/core/helpers/text_style_helper.dart';
 import 'package:alarm_app/cubits/add_alarm_cubit/add_alarm_cubit.dart';
 import 'package:alarm_app/ui/widgets/ring_selection.dart';
@@ -61,6 +62,9 @@ class AddAlarm extends StatelessWidget {
                               context.read<AddAlarmCubit>().alarmTitleController.text,
                           alarmTone: context.read<AddAlarmCubit>().selectedTone,
                         );
+                    AppNotifyHelper.showScheduledNotification(
+                      time: context.read<AddAlarmCubit>().selectedTime,
+                    );
                     Navigator.pop(context,true);
                   },
                   color: AppColorHelper.yellowColor,

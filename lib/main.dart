@@ -1,5 +1,6 @@
 import 'package:alarm_app/alarm_app.dart';
 import 'package:alarm_app/core/constances/boxs_constances.dart';
+import 'package:alarm_app/core/helpers/notify_helper.dart';
 import 'package:alarm_app/core/routing/routing_manager.dart';
 import 'package:alarm_app/data/model/alarm_model.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(AlarmModelAdapter());
   await Hive.openBox<AlarmModel>(AppBoxsConstance.alarmBox);
+  await AppNotifyHelper.init();
   runApp(
     MyApp(
       routingManager: AppRoutingManager(),
