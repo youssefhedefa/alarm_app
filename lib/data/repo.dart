@@ -4,9 +4,12 @@ import 'package:dartz/dartz.dart';
 import 'package:hive/hive.dart';
 
 class AlarmRepo{
+
+  var notesBox = Hive.box<AlarmModel>(AppBoxsConstance.alarmBox);
+
   Future<Either<String,List<AlarmModel>>> getAlarms() async {
     try {
-      var notesBox = Hive.box<AlarmModel>(AppBoxsConstance.alarmBox);
+      notesBox = Hive.box<AlarmModel>(AppBoxsConstance.alarmBox);
       List<AlarmModel> alarms = notesBox.values.toList();
       return Right(alarms);
     } catch (error) {
@@ -15,7 +18,7 @@ class AlarmRepo{
   }
   Future<Either<String,bool>> addAlarm({required AlarmModel alarm}) async {
     try {
-      var notesBox = Hive.box<AlarmModel>(AppBoxsConstance.alarmBox);
+      notesBox = Hive.box<AlarmModel>(AppBoxsConstance.alarmBox);
       await notesBox.add(alarm);
       return const Right(true);
     } catch (error) {
@@ -27,6 +30,6 @@ class AlarmRepo{
     // Update data in database
   }
   Future<void> deleteAlarm(AlarmModel alarm) async {
-    // Delete data from database
+
   }
 }

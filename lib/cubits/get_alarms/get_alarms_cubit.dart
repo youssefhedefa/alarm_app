@@ -12,7 +12,9 @@ class GetAlarmsCubit extends Cubit<GetAlarmsStates> {
     final result = await alarmRepo.getAlarms();
     result.fold(
       (error) => emit(GetAlarmsFailed(error: error)),
-      (alarms) => emit(GetAlarmsSuccess(alarms: alarms)),
+      (alarms) {
+        emit(GetAlarmsSuccess(alarms: alarms));
+      },
     );
   }
 }

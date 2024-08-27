@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:alarm_app/core/helpers/audio_helper.dart';
 import 'package:alarm_app/core/helpers/color_helper.dart';
 import 'package:alarm_app/core/helpers/text_style_helper.dart';
@@ -41,7 +43,8 @@ class _RingSelectionState extends State<RingSelection> {
           ),
           onSelected: (int? value) {
             audioPlayer.setAsset(audioMap[value!]!);
-            context.read<AddAlarmCubit>().selectedTone = audioMap[value]!;
+            context.read<AddAlarmCubit>().selectedTone = audioMap[value]!.replaceFirst('assets/alarm_sounds/', '');
+            log(context.read<AddAlarmCubit>().selectedTone);
           },
           dropdownMenuEntries: dropDownItemMaker(items: [
             'Ring 1',

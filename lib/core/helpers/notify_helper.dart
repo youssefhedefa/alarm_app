@@ -31,13 +31,13 @@ class AppNotifyHelper{
 
   //basic Notification
   static void showBasicNotification() async {
-    AndroidNotificationDetails android = const AndroidNotificationDetails(
+    AndroidNotificationDetails android = AndroidNotificationDetails(
         'id : basic notification',
         'basic notification',
         importance: Importance.max,
         priority: Priority.high,
-        // sound:
-        // RawResourceAndroidNotificationSound('sound.wav'.split('.').first)
+        sound:
+        RawResourceAndroidNotificationSound('a2.mp3'.split('.').first)
       );
     NotificationDetails details = NotificationDetails(
       android: android,
@@ -96,14 +96,16 @@ class AppNotifyHelper{
   }
 
   //showScheduledNotification
-  static void showScheduledNotification({required DateTime time}) async {
-    const AndroidNotificationDetails android = AndroidNotificationDetails(
+  static void showScheduledNotification({required DateTime time,required String tone}) async {
+
+    AndroidNotificationDetails android = AndroidNotificationDetails(
       'scheduled notification',
       'id 3',
       importance: Importance.max,
       priority: Priority.high,
+      sound: RawResourceAndroidNotificationSound(tone.split('.').first),
     );
-    NotificationDetails details = const NotificationDetails(
+    NotificationDetails details = NotificationDetails(
       android: android,
     );
     tz.initializeTimeZones();
@@ -113,9 +115,25 @@ class AppNotifyHelper{
     log(tz.local.name);
     log(tz.TZDateTime(
       tz.local,
-      time.year,
-      time.month,
+      DateTime.now().year,
+      DateTime.now().month,
       time.day,
+      time.hour,
+      time.minute,
+      time.second,
+    ).toString(),);
+    int day = time.day;
+    //if(time.hour > DateTime.now().hour) {
+    if(time.isBefore(DateTime.now())) {
+      log("time.day > DateTime.now().day");
+      day = DateTime.now().add(const Duration(days: 1)).day;
+    }
+
+    log(tz.TZDateTime(
+      tz.local,
+      DateTime.now().year,
+      DateTime.now().month,
+      day,
       time.hour,
       time.minute,
       time.second,
@@ -130,9 +148,9 @@ class AppNotifyHelper{
       // tz.TZDateTime.add(const Duration(seconds: 40), tz.getLocation('Europe/Paris')),
       tz.TZDateTime(
         tz.local,
-        time.year,
-        time.month,
-        time.day,
+        DateTime.now().year,
+        DateTime.now().month,
+        day,
         time.hour,
         time.minute,
         time.second,

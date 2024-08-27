@@ -7,18 +7,25 @@ import 'package:alarm_app/ui/widgets/add_alarm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AppRoutingManager{
+class AppRoutingManager {
   final alarmRepo = AlarmRepo();
-  Route? onGenerateRoute(RouteSettings settings){
-    switch(settings.name){
+  Route? onGenerateRoute(RouteSettings settings) {
+    switch (settings.name) {
       case AppRoutingConstances.home:
-        return MaterialPageRoute(builder: (context) => BlocProvider(
-          create: (context) => GetAlarmsCubit(alarmRepo: alarmRepo)..getAlarms(),
-            child: const HomeScreen(),),);
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) =>
+                GetAlarmsCubit(alarmRepo: alarmRepo)..getAlarms(),
+            child: const HomeScreen(),
+          ),
+        );
       case AppRoutingConstances.addAlarm:
-        return MaterialPageRoute(builder: (context) => BlocProvider(
-          create: (context) => AddAlarmCubit(alarmRepo: alarmRepo),
-            child: const AddAlarm(),),);
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => AddAlarmCubit(alarmRepo: alarmRepo),
+            child: const AddAlarm(),
+          ),
+        );
       default:
         return null;
     }

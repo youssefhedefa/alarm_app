@@ -1,3 +1,3 @@
 abstract class AppBoxsConstance {
-  static const String alarmBox = 'alarmBox';
+  static const String alarmBox = 'alarmsBox';
 }

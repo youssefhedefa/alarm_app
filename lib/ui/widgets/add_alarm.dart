@@ -30,8 +30,8 @@ class AddAlarm extends StatelessWidget {
                   ),
                   child: CupertinoDatePicker(
                     backgroundColor: AppColorHelper.disableColor,
-                    minimumDate: DateTime.now(),
-                    mode: CupertinoDatePickerMode.dateAndTime,
+                    //minimumDate: DateTime.now(),
+                    mode: CupertinoDatePickerMode.time,
                     onDateTimeChanged: (DateTime dateTime) {
                       print(dateTime);
                       context.read<AddAlarmCubit>().selectedTime = dateTime;
@@ -64,6 +64,7 @@ class AddAlarm extends StatelessWidget {
                         );
                     AppNotifyHelper.showScheduledNotification(
                       time: context.read<AddAlarmCubit>().selectedTime,
+                      tone: context.read<AddAlarmCubit>().selectedTone,
                     );
                     Navigator.pop(context,true);
                   },

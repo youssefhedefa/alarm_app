@@ -8,8 +8,21 @@ import 'package:alarm_app/ui/widgets/alarm_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+
+
+  @override
+  void didChangeDependencies() {
+    context.read<GetAlarmsCubit>().getAlarms();
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,41 +31,37 @@ class HomeScreen extends StatelessWidget {
       floatingActionButton: buildFAB(context),
       body: SafeArea(
         child: BlocBuilder<GetAlarmsCubit, GetAlarmsStates>(
-            builder: (context, state) {
-          if (state is GetAlarmsLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (state is GetAlarmsFailed) {
-            return Center(child: Text(state.error));
-          }
-          if (state is GetAlarmsSuccess) {
-            if (state.alarms.isEmpty) {
-              return const Center(
-                child: Text(
-                  'No alarms yet',
-                  style: AppTextStyleHelper.font36WhiteMedium,
-                ),
-              );
-            } else {
-              return GridView.builder(
-                padding: const EdgeInsets.all(16),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.85,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                ),
-                itemCount: state.alarms.length,
-                itemBuilder: (context, index) {
-                  return AlarmItem(
-                    alarm: state.alarms[index],
-                  );
-                },
-              );
+          builder: (context, state) {
+            if (state is GetAlarmsLoading) {
+              return const Center(child: CircularProgressIndicator());
             }
-          }
-          return const SizedBox();
-        }),
+            if (state is GetAlarmsFailed) {
+              return Center(child: Text(state.error));
+            }
+            if (state is GetAlarmsSuccess) {
+              if (state.alarms.isEmpty) {
+                return const Center(
+                  child: Text(
+                    'No alarms yet',
+                    style: AppTextStyleHelper.font36WhiteMedium,
+                  ),
+                );
+              } else {
+                return ListView.separated(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: state.alarms.length,
+                  itemBuilder: (context, index) {
+                    return AlarmItem(
+                      alarm: state.alarms[index],
+                    );
+                  },
+                  separatorBuilder: (context, index) => const SizedBox(height: 16),
+                );
+              }
+            }
+            return const SizedBox();
+          },
+        ),
       ),
     );
   }

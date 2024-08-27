@@ -15,7 +15,6 @@ class AddAlarmCubit extends Cubit<AddAlarmStates> {
   DateTime selectedTime = DateTime.now();
   String selectedTone = AppAudioHelper.audio1Path;
 
-
   void addAlarm({
     required DateTime alarmTime,
     required String alarmTitle,
@@ -24,7 +23,7 @@ class AddAlarmCubit extends Cubit<AddAlarmStates> {
     emit(AddAlarmLoading());
     final result = await alarmRepo.addAlarm(
       alarm: AlarmModel(
-        id: DateTime.now().millisecondsSinceEpoch + Random().nextInt(1000),
+        id: DateTime.now().microsecondsSinceEpoch + Random().nextInt(1000),
         alarmTime: alarmTime,
         alarmTitle: alarmTitle,
         alarmTone: alarmTone,
